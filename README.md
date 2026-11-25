@@ -36,6 +36,31 @@ finally:
     arm.stop()
 ```
 
+### Lifter
+
+The OpenArm Cell lifter has its own driver. Heights are in mm above the
+bottom stop, which `calibrate()` finds. Moves are meant to be called every
+control cycle.
+
+```python
+import time
+import openarm_driver
+
+lifter = openarm_driver.LifterDriver("can2")
+lifter.enable()
+try:
+    if not lifter.calibrate():
+        raise RuntimeError("the lifter did not find the bottom")
+    while lifter.fetch_state()["elevation_mm"] < 99.9:
+        lifter.move_to(100.0, max_speed_mm_s=10.0)
+        time.sleep(0.004)
+finally:
+    if lifter.home():
+        lifter.disable()
+    else:
+        lifter.hold()
+```
+
 ## Config
 
 Please refer to the [default configuration](src/openarm_driver/configs/openarm_cell.yaml).

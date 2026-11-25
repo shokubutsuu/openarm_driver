@@ -23,6 +23,9 @@ from .config import (
 from .driver import (
     SingleArmDriver as SingleArmDriver,
 )
+from .lifter import (
+    LifterDriver as LifterDriver,
+)
 
 # Base safety classes (generic framework)
 from .base_safety import (
